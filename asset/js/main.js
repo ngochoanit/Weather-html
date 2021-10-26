@@ -98,6 +98,7 @@ recognition.onspeechend = () => {
 }
 recognition.onerror = (event) => {
     recognition.stop()
+    microphone.classList.remove('recording')
     console.log('Speech recognition error detected: ' + event.error);
 }
 recognition.onresult = (e) => {
@@ -111,10 +112,12 @@ const handleVoice = (text) => {
     if (handledText.includes('thời tiết tại')) {
         const location = handledText.split('tại')[1].trim();
 
-        console.log('location', location);
         searchInput.value = location;
         const changeEvent = new Event('change');
         searchInput.dispatchEvent(changeEvent);
+        return;
+    } if (handledText.includes('thời tiết hiện tại')) {
+        getWeatherByIP()
         return;
     }
 
