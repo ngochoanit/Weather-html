@@ -50,6 +50,51 @@ html {
 
 }
 
+.microphone {
+    cursor: pointer;
+}
+
+.microphone .recording-icon {
+    visibility               : hidden;
+    width                    : 10px;
+    height                   : 10px;
+    background-color         : #e22d2d;
+    border-radius            : 50%;
+    animation-name           : pulse;
+    animation-duration       : 2.0s;
+    animation-timing-function: ease-out;
+    animation-direction      : alternate;
+    animation-iteration-count: infinite;
+    animation-play-state     : running;
+}
+
+.microphone.recording .recording-icon {
+    visibility: visible;
+    display   : inline-block;
+}
+
+.microphone.recording .fa-microphone {
+    display: none;
+}
+
+@keyframes pulse {
+
+    0% {
+        transform       : scale(.5);
+        background-color: rgba(255, 0, 0, 0.3);
+        border-radius   : 100%;
+    }
+
+    50% {
+        background-color: rgba(255, 0, 0, 0.5);
+    }
+
+    100% {
+        transform       : scale(2.0);
+        background-color: rgba(255, 0, 0, 0.7);
+    }
+}
+
 .info-wraper {
     display        : flex;
     flex-direction : column;

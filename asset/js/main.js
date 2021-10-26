@@ -7,10 +7,14 @@ const sunrise = document.querySelector('.sunrise')
 const sunset = document.querySelector('.sunset')
 const humidity = document.querySelector('.humidity')
 const windSpeed = document.querySelector('.wind-speed')
+const microphone = document.querySelector('.microphone')
+
 const APP_WEATHER_ID = '296f8c5729ff9fa23838c6079dae1641'
 const DEFAULT_VALUE = '--'
 const APP_LOCATION_ID = '8bd1ab6809ea415fa282b30662849ada'
-https://api.ipgeolocation.io/ipgeo?apiKey=8bd1ab6809ea415fa282b30662849ada
+
+const regionNamesInEnglish = new Intl.DisplayNames(['vi'], { type: 'region' });
+
 searchInput.addEventListener('change', (e) => {
     const city = removeVietnameseTones(e.target.value)
     getWeatherAPI(city)
@@ -28,7 +32,7 @@ function getWeatherAPI(address, location = '') {
 }
 function render(data, location) {
 
-    cityName.innerHTML = `${location && (location + ' -')} ${data.name} ` || DEFAULT_VALUE
+    cityName.innerHTML = `${location ? (location + ' - ' + data.name) : (data.name + ' - ' + regionNamesInEnglish.of(data.sys.country))} ` || DEFAULT_VALUE
     weatherState.innerHTML = data.weather[0].description || DEFAULT_VALUE
     weatherIcon.setAttribute('src', `http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`)
     temperature.innerHTML = Math.round(data.main.temp) || DEFAULT_VALUE
@@ -42,9 +46,7 @@ function getWeatherByIP() {
         if (res && res.status === 200) {
             const data = await res.json();
             const City = await data.country_capital
-            console.log(data)
             const location = await data.district
-            console.log(location)
             await getWeatherAPI(City, location)
         }
     })
@@ -77,4 +79,57 @@ function removeVietnameseTones(str) {
     str = str.replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g, " ");
     return str;
 }
+
+// virtual assistant.
+var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition
+
+const recognition = new SpeechRecognition();
+
+recognition.lang = 'vi-VI';
+recognition.continuous = false;
+microphone.addEventListener('click', (e) => {
+    e.preventDefault();
+    recognition.start()
+    microphone.classList.add('recording')
+})
+recognition.onspeechend = () => {
+    recognition.stop()
+    microphone.classList.remove('recording')
+}
+recognition.onerror = (event) => {
+    recognition.stop()
+    console.log('Speech recognition error detected: ' + event.error);
+}
+recognition.onresult = (e) => {
+    const text = e.results[0][0].transcript
+
+    handleVoice(text)
+}
+const handleVoice = (text) => {
+    // "thời tiết tại Đà Nẵng" => ["thời tiết tại", "Đà Nẵng"]
+    const handledText = text.toLowerCase();
+    if (handledText.includes('thời tiết tại')) {
+        const location = handledText.split('tại')[1].trim();
+
+        console.log('location', location);
+        searchInput.value = location;
+        const changeEvent = new Event('change');
+        searchInput.dispatchEvent(changeEvent);
+        return;
+    }
+
+    const container = document.querySelector('.container');
+    if (handledText.includes('thay đổi màu nền')) {
+        const color = handledText.split('màu nền')[1].trim();
+        container.style.background = color;
+        return;
+    }
+
+    if (handledText.includes('màu nền mặc định')) {
+        container.style.background = '';
+        return;
+    }
+
+}
+
 getWeatherByIP()
