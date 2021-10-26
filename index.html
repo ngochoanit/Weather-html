@@ -7,44 +7,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="./favicon.ico?v=2" type="image/x-icon" />
     <script src="./asset/js/all.min.js"></script>
+    <link rel="stylesheet" href="./asset/css/style.css">
+    <script src="./asset/js/moment.js"></script>
     <title>Weather</title>
 </head>
 
 <body>
-    <div class="contauner">
+    <div class="container">
         <div class="main-section">
             <div class="search-bar">
-                <i class="fas fa-search"></i>
-                <input type="text" name="search-city" placeholder="Search" id="search-input">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" name="search-city" placeholder="Tìm kiếm thành phố" id="search-input">
+            </div>
+            <div class="info-wraper">
                 <p class="city-name">Ho Chi Minh</p>
                 <p class="weather-state">Mây Thưa</p>
-                <img src="http://openweathermap.org/img/wn/10d@2x.png" alt="weather-icon">
+                <img class="weather-icon" src="http://openweathermap.org/img/wn/10d@2x.png" alt="weather-icon">
                 <p class="temperature">26</p>
             </div>
         </div>
         <div class="additional-section">
             <div class="row">
                 <div class="item">
-                    <div class="label">Mat troi moc</div>
-                    <div class="value">6h16'</div>
+                    <div class="label">Sunrise</div>
+                    <div class="value sunrise">0:00</div>
                 </div>
                 <div class="item">
-                    <div class="label">Mat troi lan</div>
-                    <div class="value">6h16'</div>
+                    <div class="label">Sunset</div>
+                    <div class="value sunset">0:00</div>
                 </div>
             </div>
             <div class="row">
                 <div class="item">
-                    <div class="label">Do am</div>
-                    <div class="value">73 %</div>
+                    <div class="label">Humidity</div>
+                    <div class="value ">
+                        <sapn class="humidity">0</sapn>%
+                    </div>
                 </div>
                 <div class="item">
-                    <div class="label">Gio</div>
-                    <div class="value">5.54 km/h</div>
+                    <div class="label">Wind</div>
+                    <div class="value"><span class="wind-speed">0</span> km/h</div>
                 </div>
             </div>
         </div>
     </div>
+    <script src="./asset/js/main.js"></script>
 </body>
 
 </html>
